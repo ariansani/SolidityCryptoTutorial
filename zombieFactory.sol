@@ -19,6 +19,9 @@ contract ZombieFactory {
 
     //If you declare as public, Solidity will automatically create a Getter method
     Zombie[] public zombies;
+    
+    mapping(uint => address) public zombieToOwner;
+    mapping(address=> uint) ownerZombieCount;
 
     //two ways to pass an argument to a Solidity function:
         // By value, which means that the Solidity compiler creates a new copy of the parameter's value
@@ -29,8 +32,10 @@ contract ZombieFactory {
 
     //Start function parameter variables with an underscore _
 
-    function _createZombie(string memory _name, uint _dna) private {
+    function _createZombie(string memory _name, uint _dna) internal {
         uint id = zombies.push(Zombie(_name, _dna)) - 1;
+        zombieToOwner[id] = msg.sender;
+        ownerZombieCount[msg.sender]++;
         emit NewZombie(id, _name, _dna);
     }
 
@@ -43,13 +48,11 @@ contract ZombieFactory {
     }
 
         function createRandomZombie(string memory _name) public {
+        require(ownerZombieCount[msg.sender]==0);
         uint randDna = _generateRandomDna(_name);
         _createZombie(_name, randDna);
     }
 
    
-
-
-
-
 }
+
