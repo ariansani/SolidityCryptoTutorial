@@ -20,9 +20,11 @@ contract KittyInterface {
 
 contract ZombieFeeding is ZombieFactory{
 
-    address ckAddress = 0x06012c8cf97BEaD5deAe237070F9587f8E7A266d;
-    KittyInterface kittyContract = KittyInterface(ckAddress);
+  KittyInterface kittyContract;
 
+function setKittyContractAddress(address _address) external {
+  kittyContract = KittyInterface(_address);
+}
 //     In Solidity, there are two locations you can store variables — in storage and in memory.
 
 // Storage refers to variables stored permanently on the blockchain. 

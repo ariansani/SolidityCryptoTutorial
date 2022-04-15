@@ -1,7 +1,8 @@
 pragma solidity >=0.8;
 
+import "./ownable.sol";
 
-contract ZombieFactory {
+contract ZombieFactory is Ownable{
 
      //events
     //way for your contract to communicate that something hapened on the blockchain to your app front-end
