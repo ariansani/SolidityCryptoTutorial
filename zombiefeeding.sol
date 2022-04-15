@@ -3,8 +3,8 @@ pragma solidity >=0.8;
 import "./zombieFactory.sol";
 
 
-contract KittyInterface {
-  function getKitty(uint256 _id) external view returns (
+abstract contract KittyInterface {
+   function getKitty(uint256 _id) external view returns (
     bool isGestating,
     bool isReady,
     uint256 cooldownIndex,
@@ -22,10 +22,21 @@ contract ZombieFeeding is ZombieFactory{
 
   KittyInterface kittyContract;
 
-function setKittyContractAddress(address _address) external {
+function setKittyContractAddress(address _address) external onlyOwner {
   kittyContract = KittyInterface(_address);
 }
 //     In Solidity, there are two locations you can store variables — in storage and in memory.
+
+
+  // 1. Define `_triggerCooldown` function here
+  function _triggerCooldown(Zombie storage _zombie) internal {
+    _zombie.readyTime = uint32(block.timestamp + cooldownTime);
+  }
+
+  // 2. Define `_isReady` function here
+  function _isReady(Zombie storage _zombie) internal view returns (bool){
+    return (_zombie.readyTime <= block.timestamp);
+  }
 
 // Storage refers to variables stored permanently on the blockchain. 
 // Memory variables are temporary, and are erased between external function calls to your contract.
