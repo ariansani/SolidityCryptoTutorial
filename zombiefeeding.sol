@@ -41,16 +41,18 @@ function setKittyContractAddress(address _address) external onlyOwner {
 // Storage refers to variables stored permanently on the blockchain. 
 // Memory variables are temporary, and are erased between external function calls to your contract.
 //  Think of it like your computer's hard disk vs RAM.
-  function feedAndMultiply(uint _zombieId, uint _targetDna, string memory _species) public {
+  function feedAndMultiply(uint _zombieId, uint _targetDna, string memory _species) internal {
     require(msg.sender == zombieToOwner[_zombieId]);
     Zombie storage myZombie = zombies[_zombieId];
-    // start here
+    require(_isReady(myZombie));
+    
     _targetDna = _targetDna % dnaModulus;
     uint newDna = (myZombie.dna + _targetDna)/2;
       if (keccak256(abi.encodePacked(_species)) == keccak256(abi.encodePacked("kitty"))) {
       newDna = newDna - newDna % 100 + 99;
     }
     _createZombie("NoName",newDna);
+    _triggerCooldown(myZombie);
   }
      function feedOnKitty(uint _zombieId, uint _kittyId) public {
     uint kittyDna;
