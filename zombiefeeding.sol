@@ -4,7 +4,7 @@ import "./zombieFactory.sol";
 
 
 abstract contract KittyInterface {
-   function getKitty(uint256 _id) external view returns (
+   function getKitty(uint256 _id) external virtual view returns (
     bool isGestating,
     bool isReady,
     uint256 cooldownIndex,
